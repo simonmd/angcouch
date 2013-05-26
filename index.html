@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="CouchApp">
+<html lang="en" ng-app="MRParaMetrix">
   <head>
     <meta charset="utf-8">
     <title>MR ParaMetrix</title>
@@ -109,7 +109,7 @@
           </div><!--/row-->
 
       		<div class="row-fluid">
-						<pre>query = {{finalquery | json}}</pre>
+						<pre>{{finalquery | chartData}}</pre>
 					</div>
 
         </div><!--/span-->
@@ -129,6 +129,5 @@
 		<script type="text/javascript" src="js/angular.js"></script>
 		<script type="text/javascript" src="js/angular-cornercouch.js"></script>
 		<script type="text/javascript" src="js/couchctrl.js"></script>
-
   </body>
 </html>

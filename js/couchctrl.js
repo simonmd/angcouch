@@ -1,4 +1,16 @@
-angular.module('CouchApp', ['CornerCouch']);
+angular.module('MRParaMetrix.ChartDataFormatter', []).
+  filter('chartData', function() {
+    return function(resultsjson) {
+      rows = resultsjson.data.rows;
+      results = [];
+      for (var key in rows) {
+        results.push([rows[key].key[3], rows[key].value]);
+      }
+      return results
+    };
+  });
+
+angular.module('MRParaMetrix', ['CornerCouch', 'MRParaMetrix.ChartDataFormatter']);
 
 // CouchDB App Controller - uses CornerCouch library
 function CouchCtrl($scope, $filter, cornercouch) {
@@ -32,18 +44,14 @@ function CouchCtrl($scope, $filter, cornercouch) {
 
 	// Query update on filter
 	$scope.updatequery = function(cdbquery) {
-		// Composite key for query
-		// var compkey = [cdbquery.scanner.key,cdbquery.study[1],cdbquery.series[2]];
-		var compkey_start = [cdbquery.scanner.key,cdbquery.study[1],0];
-		var compkey_end = [cdbquery.scanner.key,cdbquery.study[1],{}];
-
-		// var compkey = ["IATMR3","RM HIPOFISIS",{}];
   	// Final query definition
-  	$scope.finalquery = $scope.mrdb.query("test", "TR", {
-  																				startkey: compkey_start,
-  																				endkey: compkey_end,
-  																				group: true,
-  																				limit: 10 });
+    qresults = $scope.mrdb.query("test", "TR", {
+                                          startkey: [cdbquery.scanner.key,cdbquery.study[1],0],
+                                          endkey: [cdbquery.scanner.key,cdbquery.study[1],{}],
+                                          group: true,
+                                          limit: 10 });
+
+  	$scope.finalquery = qresults;
 	};
 
 };
