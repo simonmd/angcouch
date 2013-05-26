@@ -84,14 +84,14 @@
             <form novalidate class="simple-form">
 							<div class="alert alert-info span4">
 								<pre>scanner = {{ cdbquery.scanner.key }}</pre>
-								<select name="Scanner" ng-model="cdbquery.scanner"	ng-options="s.key for s in scanners.data.rows">
+								<select name="Scanner" ng-model="cdbquery.scanner" ng-change="scanner_change(cdbquery.scanner)" ng-options="s.key for s in scanners.data.rows">
 									<option value="">-- Choose scanner --</option>
 								</select>
 							</div>
 
 							<div class="alert alert-info span4">
 								<pre>study = {{ cdbquery.study[1] }}</pre>
-								<select name="Studies" ng-model="cdbquery.study" ng-options="s.key as s.key[1] for s in studies.data.rows">
+								<select name="Studies" ng-model="cdbquery.study" ng-change="study_change(cdbquery.scanner,cdbquery.study)" ng-options="s.key as s.key[1] for s in studies.data.rows">
 									<option value="">-- Choose study --</option>
 								</select>
 							</div>
