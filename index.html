@@ -98,19 +98,31 @@
 
 							<div class="alert alert-info span4">
 								<pre>serie = {{ cdbquery.series[2] }}</pre>
-								<select name="Series"	ng-model="cdbquery.series" ng-options="s.key as s.key[2] for s in series.data.rows">
+								<select name="Series"	ng-model="cdbquery.series" ng-options="s.key as s.key[2] for s in series.data.rows" ng-change="series_change(cdbquery.scanner,cdbquery.study,cdbquery.series)">
 									<option value="">-- Choose series --</option>
 								</select>
 							</div>
 
-							<button ng-click="updatequery(cdbquery)" class="btn btn-primary">Query</button>
+							<button ng-click="submitquery(cdbquery)" class="btn btn-primary">Query</button>
 
 						</form>
           </div><!--/row-->
 
-      		<div class="row-fluid">
-						<pre>{{finalquery | chartData}}</pre>
+          <div class="row-fluid" ng-show="results">
+            <h4>Formatted results from JS</h4>
+            <pre>{{chartresults}}</pre>
+          </div>
+
+      		<div class="row-fluid" ng-show="results">
+            <h4>Formatted results from View</h4>
+						<pre>{{results | chartFormat}}</pre>
 					</div>
+
+          <!-- Main chart script-->
+          <!-- <div class="row-fluid " ng-show="results">
+            <h2>Output</h2>
+            <div google-chart chart="chart" style="{{chart.cssStyle}}"/></div>
+          </div> -->
 
         </div><!--/span-->
       </div><!--/row-->
@@ -128,6 +140,9 @@
     <!-- Placed at the end of the document so the pages load faster -->
 		<script type="text/javascript" src="js/angular.js"></script>
 		<script type="text/javascript" src="js/angular-cornercouch.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="js/ng-google-chart.js"></script>
 		<script type="text/javascript" src="js/couchctrl.js"></script>
+    <script type="text/javascript" src="js/filters.js"></script>
   </body>
 </html>
