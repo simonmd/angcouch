@@ -54,9 +54,12 @@ angular.module('MRParaMetrix', ['CornerCouch','MRParaMetrix.ChartDataFormatter',
       console.debug("$scope.results in submitquery : %O", $scope.results);
 
       // $scope.chartresults = $filter('uppercase')($scope.results); // WTF!! This works!
-      $scope.chartresults = $filter('chartFormat')($scope.results); // But this does not.
-      console.debug("$scope.chartresults in submitquery : %O", $scope.chartresults);
     };
+
+    $scope.$watch('results', function() {
+      $scope.chartresults = $filter('chartFormat')($scope.results); // But this does not.
+      console.debug("$scope.chartresults in watch : %O", $scope.chartresults);
+    }
 
     // function makeChart() {
     //   console.info("makeChart invoked");
