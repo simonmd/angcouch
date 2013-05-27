@@ -1,4 +1,4 @@
-angular.module('MRParaMetrix.ChartDataFormatter', []).
+angular.module('ChartFormatFilter', []).
   filter('chartFormat', function() {
     // console.debug("chartFormat filter invoked");
     return function(results) {

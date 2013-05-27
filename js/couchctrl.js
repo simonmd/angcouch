@@ -2,7 +2,7 @@
 google.load('visualization', '1', {packages: ['corechart']});
 
 // Begin AngularJS module
-angular.module('MRParaMetrix', ['CornerCouch','MRParaMetrix.ChartDataFormatter','googlechart.directives']).
+angular.module('MRParaMetrix', ['CornerCouch','ChartFormatFilter','googlechart.directives']).
   controller("CouchCtrl", function ($scope, $filter, cornercouch) {
 
     // Define CouchDB server
@@ -46,7 +46,7 @@ angular.module('MRParaMetrix', ['CornerCouch','MRParaMetrix.ChartDataFormatter',
       console.debug("submitquery invoked");
       console.debug("cdbquery in submitquery : %O", cdbquery);
 
-      $scope.results = $scope.mrdb.query("test", "TR", {
+      $scope.results = $scope.mrdb.list("test", "chart", "TR", {
                                             startkey: [cdbquery.scanner.key,cdbquery.study[1],0],
                                             endkey: [cdbquery.scanner.key,cdbquery.study[1],{}],
                                             group: true,
@@ -54,32 +54,18 @@ angular.module('MRParaMetrix', ['CornerCouch','MRParaMetrix.ChartDataFormatter',
       console.debug("$scope.results in submitquery : %O", $scope.results);
 
       // $scope.chartresults = $filter('uppercase')($scope.results); // WTF!! This works!
+
     };
 
-    $scope.$watch('results', function() {
-      $scope.chartresults = $filter('chartFormat')($scope.results); // But this does not.
-      console.debug("$scope.chartresults in watch : %O", $scope.chartresults);
-    }
+      var chart1 = {};
+      chart1.type = "ColumnChart";
+      chart1.displayed = false;
+      chart1.cssStyle = "height:600px; width:100%;";
+      chart1.data = $scope.results;
 
-    // function makeChart() {
-    //   console.info("makeChart invoked");
-    //   // // Chart stuff
-    //   var chart1 = {};
-    //       chart1.type = "ColumnChart";
-    //       chart1.displayed = false;
-    //       chart1.cssStyle = "height:600px; width:100%;";
+      chart1.options = {};
 
-    //       // Create the data table.
-    //       var couchdata = filteredResults();
-    //       chart1.data = new google.visualization.DataTable();
-    //       data.addColumn('number', 'Value');
-    //       data.addColumn('number', 'Frequency');
-    //       data.addRows(couchdata);
-
-    //       $scope.chart = chart1;
-
-    //   // End Chart stuff
-    // }
+      $scope.chart = chart1;
 
   }
 );

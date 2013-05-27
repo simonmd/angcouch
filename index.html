@@ -108,21 +108,16 @@
 						</form>
           </div><!--/row-->
 
-          <div class="row-fluid" ng-show="results">
-            <h4>Formatted results from JS</h4>
-            <pre>{{chartresults}}</pre>
-          </div>
-
       		<div class="row-fluid" ng-show="results">
-            <h4>Formatted results from View</h4>
-						<pre>{{results | chartFormat}}</pre>
+            <h4>Results</h4>
+						<pre>{{results.data}}</pre>
 					</div>
 
           <!-- Main chart script-->
-          <!-- <div class="row-fluid " ng-show="results">
+          <div class="row-fluid " ng-show="results">
             <h2>Output</h2>
-            <div google-chart chart="chart" style="{{chart.cssStyle}}"/></div>
-          </div> -->
+            <div google-chart chart="chart" data="results.data" style="{{chart.cssStyle}}"/></div>
+          </div>
 
         </div><!--/span-->
       </div><!--/row-->
