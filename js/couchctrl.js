@@ -46,26 +46,26 @@ angular.module('MRParaMetrix', ['CornerCouch','ChartFormatFilter','googlechart.d
       console.debug("submitquery invoked");
       console.debug("cdbquery in submitquery : %O", cdbquery);
 
-      $scope.results = $scope.mrdb.list("test", "chart", "TR", {
+      $scope.cdbquery.result = $scope.mrdb.list("test", "chart", "TR", {
                                             startkey: [cdbquery.scanner.key,cdbquery.study[1],0],
                                             endkey: [cdbquery.scanner.key,cdbquery.study[1],{}],
                                             group: true,
                                             limit: 10 });
-      console.debug("$scope.results in submitquery : %O", $scope.results);
+      console.debug("$scope.results in submitquery : %O", $scope.cdbquery.result);
 
       // $scope.chartresults = $filter('uppercase')($scope.results); // WTF!! This works!
-
-    };
 
       var chart1 = {};
       chart1.type = "ColumnChart";
       chart1.displayed = false;
       chart1.cssStyle = "height:600px; width:100%;";
-      chart1.data = $scope.data;
+      chart1.data = $scope.results;
 
       chart1.options = {};
 
       $scope.chart = chart1;
+
+    };
 
   }
 );

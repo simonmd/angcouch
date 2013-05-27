@@ -12,8 +12,7 @@
         return {
             restrict: 'A',
             scope: {
-                chart: '=chart',
-                data: '='
+                chart: '=chart'
             },
             link: function ($scope, $elm, $attr) {
                 // Watches, to refresh the chart when its data, title or dimensions change
