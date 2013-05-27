@@ -61,7 +61,7 @@ angular.module('MRParaMetrix', ['CornerCouch','ChartFormatFilter','googlechart.d
       chart1.type = "ColumnChart";
       chart1.displayed = false;
       chart1.cssStyle = "height:600px; width:100%;";
-      // chart1.data = $scope.results;
+      chart1.data = {};
 
       chart1.options = {};
 
