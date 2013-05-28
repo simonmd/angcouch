@@ -9,11 +9,11 @@ myApp.factory('CouchDBService', function (cornercouch) {
 
     var CouchDBService = {
         // Define CouchDB server
-        $scope.server = cornercouch();
+        var server = cornercouch();
         // Define CouchDB database to query
-        $scope.mrdb = $scope.server.getDB('mf_hash');
-        
-        getResults: function () {           
+        var mrdb = $scope.server.getDB('mf_hash');
+
+        getScannerList: function () {           
             // $http returns a promise, which has a then function, which also returns a promise
             var promise = $http.get("avengers.json")
                 .then(function (response) {
@@ -25,12 +25,7 @@ myApp.factory('CouchDBService', function (cornercouch) {
             });
             // Return the promise to the controller
             return promise;
-        },
-
-        getScannerList: function(){
-          return ["Scanner1", "Scanner2"];
         }
-
     };
 
     return CouchDBService;
