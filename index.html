@@ -33,26 +33,27 @@
         <div class="span12">
           <div class="row-fluid">
             <form novalidate class="simple-form">
+            
               <!-- Scaner select -->
 							<div class="alert alert-info span4">
-								<pre>Scanner: {{ selectedScanner.key }}</pre>
-								<select name="Scanner" ng-model="selectedScanner" ng-options="s.key for s in scannerList.data.rows">
+								<pre>Scanner: {{ qParams.selectedScanner.key }}</pre>
+								<select name="Scanner" ng-model="qParams.selectedScanner" ng-options="s.key for s in sLists.scannerList.data.rows">
 									<option value="">-- Choose scanner --</option>
 								</select>
 							</div>
 
               <!-- Study select -->
 							<div class="alert alert-info span4">
-								<pre>Study: {{ selectedStudy[1] }}</pre>
-								<select name="Studies" ng-model="selectedStudy" ng-options="s.key as s.key[1] for s in studyList.data.rows">
+								<pre>Study: {{ qParams.selectedStudy[1] }}</pre>
+								<select name="Studies" ng-model="qParams.selectedStudy" ng-options="s.key as s.key[1] for s in sLists.studyList.data.rows">
 									<option value="">-- Choose study --</option>
 								</select>
 							</div>
 
               <!-- Series select -->
 							<div class="alert alert-info span4">
-								<pre>Series: {{ selectedSeries[2] }}</pre>
-								<select name="Series"	ng-model="selectedSeries" ng-options="s.key as s.key[2] for s in seriesList.data.rows">
+								<pre>Series: {{ qParams.selectedSeries[2] }}</pre>
+								<select name="Series"	ng-model="qParams.selectedSeries" ng-options="s.key as s.key[2] for s in sLists.seriesList.data.rows">
 									<option value="">-- Choose series --</option>
 								</select>
 							</div>
@@ -63,15 +64,15 @@
 						</form>
           </div><!--/row-->
 
-      		<div class="row-fluid" ng-show="results">
+      		<div class="row-fluid">
             <h4>Results Debug</h4>
-            <pre>Results: {{results.data}}</pre>
+            <pre>Results: {{results.chartdata.data}}</pre>
 					</div>
 
           <!-- Main chart script-->
-          <div class="row-fluid " ng-show="results">
+          <div class="row-fluid ">
             <h2>Chart</h2>
-            <div google-chart chart="chart" style="{{chart.cssStyle}}"/></div>
+            <div google-chart chart="results.chart" style="{{chart.cssStyle}}"/></div>
           </div>
 
         </div><!--/span-->

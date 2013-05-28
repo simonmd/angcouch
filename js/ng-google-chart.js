@@ -11,6 +11,7 @@
     angular.module('googlechart.directives', []).directive('googleChart', function ($timeout) {
         return {
             restrict: 'A',
+            // scope: false,
             scope: {
                 chart: '=chart'
             },
