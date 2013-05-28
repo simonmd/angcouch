@@ -74,12 +74,13 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
     },
 
     // Get study list based on selected scanner
-    getResults: function (selectedScanner,selectedStudy,selectedSeries) {
+    getResults: function (selectedScanner,selectedStudy,selectedSeries,selectedParameter) {
       var sc = selectedScanner.key;
       var st = selectedStudy[1];
       var se = selectedSeries[2];
-      console.debug("getResults invoked with selectedScanner: %O, selectedStudy: %O and selectedSeries %O", sc, st, se);
-      var promise = mrdb.list("parameters", "chart", "TR", {
+      var p = selectedParameter;
+      console.debug("getResults invoked with selectedScanner: %O, selectedStudy: %O, selectedSeries %O and selectedParameter %O", sc, st, se, p);
+      var promise = mrdb.list("parameters", "chart", p, {
                                             startkey: [sc,st,se,0],
                                             endkey: [sc,st,se,{}],
                                             group: true})
@@ -106,9 +107,12 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
 MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService) {
   $scope.couchdb = CouchDBService;
 
-  // // Initialize query parameters and results
+  // Initialize query parameters and results
   $scope.qParams = {};
   $scope.results = {};
+
+  // Initialize a parameter to query
+  $scope.qParams.selectedParameter = "TR";
 
   // Get available parameter list  - based on the CouchDB views
   CouchDBService.getParameterList()
@@ -149,9 +153,10 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   // Watch for query parameters change, query for final results
   $scope.$watch('qParams', function(){
     if (  !angular.isUndefined($scope.qParams.selectedScanner) &&
-          !angular.isUndefined($scope.qParams.selectedStudy) && 
-          !angular.isUndefined($scope.qParams.selectedSeries)) {
-      CouchDBService.getResults($scope.qParams.selectedScanner,$scope.qParams.selectedStudy, $scope.qParams.selectedSeries)
+          !angular.isUndefined($scope.qParams.selectedStudy) &&
+          !angular.isUndefined($scope.qParams.selectedSeries) && 
+          !angular.isUndefined($scope.qParams.selectedParameter)) {
+      CouchDBService.getResults($scope.qParams.selectedScanner,$scope.qParams.selectedStudy, $scope.qParams.selectedSeries, $scope.qParams.selectedParameter)
       .then(function (r) {
           console.info("Got results from service");
           $scope.couchdb.results = r;

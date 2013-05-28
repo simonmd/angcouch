@@ -34,6 +34,12 @@
           <div class="row-fluid">
             <form novalidate class="simple-form">
 
+              <!-- Params select -->
+              <div class="alert alert-info span3">
+                <pre>Parameter: {{ qParams.selectedParameter }}</pre>
+                <select name="Parameter" ng-model="qParams.selectedParameter" ng-options="s as s for s in couchdb.parameterlist"></select>
+              </div>
+
               <!-- Scaner select -->
 							<div class="alert alert-info span3">
 								<pre>Scanner: {{ qParams.selectedScanner.key }}</pre>
@@ -57,14 +63,6 @@
 									<option value="">-- Choose series --</option>
 								</select>
 							</div>
-
-              <!-- Params select -->
-              <div class="alert alert-info span3">
-                <pre>Parameter: {{ qParams.selectedParameter }}</pre>
-                <select name="Parameter" ng-model="qParams.selectedParameter" ng-options="s as s for s in couchdb.parameterlist">
-                  <option value="">-- Choose series --</option>
-                </select>
-              </div>
 
 						</form>
           </div><!--/row-->
