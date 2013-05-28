@@ -5,13 +5,29 @@ google.load('visualization', '1', {packages: ['corechart']});
 var MRParaMetrix = angular.module('MRParaMetrix', ['CornerCouch','googlechart.directives']);
 
 
-
-
-// First attempt at creating a CouchDB service (factory)
+// ******************************** CouchDB service (factory) ******************************** 
 MRParaMetrix.factory('CouchDBService', function (cornercouch) { 
   var server = cornercouch();
   var mrdb = server.getDB('mf_hash');
   var CouchDBService = {
+
+    // Get available parameter views in couchdb database
+    getParameterList: function () {
+      var doc_object = mrdb.newDoc();
+          
+      var promise = doc_object.load("_design/parameters")
+                      .then(function (response) {
+                        // console.log(response.data);
+                        var pl =[];
+                        angular.forEach(response.data.views, function(param,key){
+                          this.push(key);
+                        },pl);
+                        return pl;
+      });
+      console.info("Getting parameter list (CouchDB views) from service");
+      return promise;
+    },
+
 
     // Get scanner list
     getScannerList: function () {
@@ -80,10 +96,11 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
   return CouchDBService;
 
 });
+// ******************************** End CouchDB service ********************************
 
 
 
-
+// ******************************** Begin MRParaMetrix main app ************************
 
 // MR ParaMetrix app main controller
 MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService) {
@@ -92,6 +109,13 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   // // Initialize query parameters and results
   $scope.qParams = {};
   $scope.results = {};
+
+  // Get available parameter list  - based on the CouchDB views
+  CouchDBService.getParameterList()
+    .then(function (param_list) {
+        console.info("Got available parameter list from service");
+        $scope.couchdb.parameterlist = param_list;
+    });
 
   // Get scanner list - the only initial query needed
   CouchDBService.getScannerList()
@@ -150,16 +174,6 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
       $scope.chart.data = $scope.couchdb.results;
     }
   });
-  // End Chart stuff
-  // $scope.chart.data = { "cols": [
-  //                       {id: "col1", label: "Test col 1 - key", type: "string"},
-  //                       {id: "col2", label: "Test col 2 - value", type: "number"}
-  //                       ], 
-  //                       "rows": [
-  //                       {c: [ {v: "January"}, {v: 19} ]},
-  //                       {c: [ {v: "February"},{v: 13} ]},
-  //                       {c: [ {v: "March"}, {v: 24} ]}
-  //                     ]};
 
  } 
 );

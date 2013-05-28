@@ -35,7 +35,7 @@
             <form novalidate class="simple-form">
 
               <!-- Scaner select -->
-							<div class="alert alert-info span4">
+							<div class="alert alert-info span3">
 								<pre>Scanner: {{ qParams.selectedScanner.key }}</pre>
 								<select name="Scanner" ng-model="qParams.selectedScanner" ng-options="s.key for s in couchdb.scannerlist.rows">
 									<option value="">-- Choose scanner --</option>
@@ -43,7 +43,7 @@
 							</div>
 
               <!-- Study select -->
-							<div class="alert alert-info span4">
+							<div class="alert alert-info span3">
 								<pre>Study: {{ qParams.selectedStudy[1] }}</pre>
 								<select name="Studies" ng-model="qParams.selectedStudy" ng-options="s.key as s.key[1] for s in couchdb.studylist.rows">
 									<option value="">-- Choose study --</option>
@@ -51,12 +51,20 @@
 							</div>
 
               <!-- Series select -->
-							<div class="alert alert-info span4">
+							<div class="alert alert-info span3">
 								<pre>Series: {{ qParams.selectedSeries[2] }}</pre>
 								<select name="Series"	ng-model="qParams.selectedSeries" ng-options="s.key as s.key[2] for s in couchdb.serieslist.rows">
 									<option value="">-- Choose series --</option>
 								</select>
 							</div>
+
+              <!-- Params select -->
+              <div class="alert alert-info span3">
+                <pre>Parameter: {{ qParams.selectedParameter }}</pre>
+                <select name="Parameter" ng-model="qParams.selectedParameter" ng-options="s as s for s in couchdb.parameterlist">
+                  <option value="">-- Choose series --</option>
+                </select>
+              </div>
 
 						</form>
           </div><!--/row-->
@@ -86,5 +94,6 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="js/ng-google-chart.js"></script>
 		<script type="text/javascript" src="js/couchctrl.js"></script>
+
   </body>
 </html>
