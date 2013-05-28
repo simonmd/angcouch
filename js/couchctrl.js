@@ -4,8 +4,36 @@ google.load('visualization', '1', {packages: ['corechart']});
 // Begin AngularJS module, include dependencies
 var MRParaMetrix = angular.module('MRParaMetrix', ['CornerCouch','googlechart.directives']);
 
+// First attempt at creating a CouchDB service
+myApp.factory('CouchDBService', function (cornercouch) {
+
+    var CouchDBService = {
+        getResults: function () {           
+            // $http returns a promise, which has a then function, which also returns a promise
+            var promise = $http.get("avengers.json")
+                .then(function (response) {
+                  // localStorageService.add('AvengersService', angular.toJson(response.data));
+                  //console.log(response.data);
+                  // The then function here is an opportunity to modify the response
+                  // The return value gets picked up by the then in the controller.
+                  // return response.data;
+            });
+            // Return the promise to the controller
+            return promise;
+        },
+
+        getScannerList: function(){
+          return ["Scanner1", "Scanner2"];
+        }
+
+    };
+
+    return CouchDBService;
+});
+
+
 // MR ParaMetrix app main controller
-MRParaMetrix.controller('MainCtrl', function($scope, cornercouch) {
+MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService) {
 
   // Define CouchDB server
   $scope.server = cornercouch();
