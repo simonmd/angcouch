@@ -37,7 +37,7 @@
               <!-- Scaner select -->
 							<div class="alert alert-info span4">
 								<pre>Scanner: {{ qParams.selectedScanner.key }}</pre>
-								<select name="Scanner" ng-model="qParams.selectedScanner" ng-options="s.key for s in sLists.scannerList.data.rows">
+								<select name="Scanner" ng-model="qParams.selectedScanner" ng-options="s.key for s in couchdb.scannerlist.rows">
 									<option value="">-- Choose scanner --</option>
 								</select>
 							</div>
@@ -45,7 +45,7 @@
               <!-- Study select -->
 							<div class="alert alert-info span4">
 								<pre>Study: {{ qParams.selectedStudy[1] }}</pre>
-								<select name="Studies" ng-model="qParams.selectedStudy" ng-options="s.key as s.key[1] for s in sLists.studyList.data.rows">
+								<select name="Studies" ng-model="qParams.selectedStudy" ng-options="s.key as s.key[1] for s in couchdb.studylist.rows">
 									<option value="">-- Choose study --</option>
 								</select>
 							</div>
@@ -53,7 +53,7 @@
               <!-- Series select -->
 							<div class="alert alert-info span4">
 								<pre>Series: {{ qParams.selectedSeries[2] }}</pre>
-								<select name="Series"	ng-model="qParams.selectedSeries" ng-options="s.key as s.key[2] for s in sLists.seriesList.data.rows">
+								<select name="Series"	ng-model="qParams.selectedSeries" ng-options="s.key as s.key[2] for s in couchdb.serieslist.rows">
 									<option value="">-- Choose series --</option>
 								</select>
 							</div>
@@ -63,7 +63,7 @@
 
       		<div class="row-fluid">
             <h4>Results Debug</h4>
-            <pre>Results: {{results.chartdata.data}}</pre>
+            <pre>Results: {{couchdb.results}}</pre>
 					</div>
 
 

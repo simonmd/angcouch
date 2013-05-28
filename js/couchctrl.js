@@ -4,72 +4,132 @@ google.load('visualization', '1', {packages: ['corechart']});
 // Begin AngularJS module, include dependencies
 var MRParaMetrix = angular.module('MRParaMetrix', ['CornerCouch','googlechart.directives']);
 
-// First attempt at creating a CouchDB service
-myApp.factory('CouchDBService', function (cornercouch) {
 
-    var CouchDBService = {
-        // Define CouchDB server
-        var server = cornercouch();
-        // Define CouchDB database to query
-        var mrdb = $scope.server.getDB('mf_hash');
 
-        getScannerList: function () {           
-            // $http returns a promise, which has a then function, which also returns a promise
-            var promise = $http.get("avengers.json")
-                .then(function (response) {
-                  // localStorageService.add('AvengersService', angular.toJson(response.data));
-                  //console.log(response.data);
-                  // The then function here is an opportunity to modify the response
-                  // The return value gets picked up by the then in the controller.
-                  // return response.data;
-            });
-            // Return the promise to the controller
-            return promise;
-        }
-    };
 
-    return CouchDBService;
+// First attempt at creating a CouchDB service (factory)
+MRParaMetrix.factory('CouchDBService', function (cornercouch) { 
+  var server = cornercouch();
+  var mrdb = server.getDB('mf_hash');
+  var CouchDBService = {
+
+    // Get scanner list
+    getScannerList: function () {
+      var promise = mrdb.query("test", "scanners", { group: true,descending: true })
+                      .then(function (response) {
+                        // console.log(response.data);
+                        return response.data;
+      });
+      console.info("Getting scanner list from service");
+      return promise;
+    },
+
+    // Get study list based on selected scanner
+    getStudyList: function (selectedScanner) {
+      var sc = selectedScanner.key;
+      console.debug("getStudyList invoked with selectedScanner: %O", sc);
+      var promise = mrdb.query("test", "studies", {
+                                        startkey: [sc,0,0],
+                                        endkey: [sc,{},{}],
+                                        group: true})
+                      .then(function (response) {
+                        // console.log(response.data);
+                        return response.data;
+      });
+      console.info("Getting study list from service");
+      return promise;
+    },
+
+    // Get study list based on selected scanner
+    getSeriesList: function (selectedScanner,selectedStudy) {
+      var sc = selectedScanner.key;
+      var st = selectedStudy[1];
+      console.debug("getSeriesList invoked with selectedScanner: %O and selectedStudy: %O", sc, st);
+      var promise = mrdb.query("test", "series", {
+                                        startkey: [sc,st,0],
+                                        endkey: [sc,st,{}],
+                                        group: true})
+                      .then(function (response) {
+                        // console.log(response.data);
+                        return response.data;
+      });
+      console.info("Getting series list from service");
+      return promise;
+    },
+
+    // Get study list based on selected scanner
+    getResults: function (selectedScanner,selectedStudy,selectedSeries) {
+      var sc = selectedScanner.key;
+      var st = selectedStudy[1];
+      var se = selectedSeries[2];
+      console.debug("getResults invoked with selectedScanner: %O, selectedStudy: %O and selectedSeries %O", sc, st, se);
+      var promise = mrdb.list("test", "chart", "TR", {
+                                            startkey: [sc,st,se,0],
+                                            endkey: [sc,st,se,{}],
+                                            group: true})
+                      .then(function (response) {
+                        // console.log(response.data);
+                        return response.data;
+      });
+      console.info("Getting results for final query from service");
+      return promise;
+    }
+
+  };
+
+  return CouchDBService;
+
 });
+
+
+
 
 
 // MR ParaMetrix app main controller
 MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService) {
+  $scope.couchdb = CouchDBService;
 
-  // Define CouchDB server
-  $scope.server = cornercouch();
-  // Define CouchDB database to query
-  $scope.mrdb = $scope.server.getDB('mf_hash');
 
-  // Initialize stuff
+
+  // // Define CouchDB server
+  // $scope.server = cornercouch();
+  // // Define CouchDB database to query
+  // $scope.mrdb = $scope.server.getDB('mf_hash');
+
+  // // Initialize stuff
   $scope.qParams = {};
-  $scope.sLists = {};
-  $scope.results = {};
+  // $scope.sLists = {};
+  // $scope.results = {};
 
   // Get scanner list - the only initial query needed
-  $scope.sLists.scannerList = $scope.mrdb.query("test", "scanners", { group: true,descending: true });
+  // $scope.sLists.scannerList = $scope.mrdb.query("test", "scanners", { group: true,descending: true });
+
+  // Get scanner list - the only initial query needed
+  CouchDBService.getScannerList()
+    .then(function (sc_list) {
+        console.info("Got scanner list from service");
+        $scope.couchdb.scannerlist = sc_list;
+    });
 
   // Trigger query for study list
   $scope.$watch('qParams.selectedScanner', function(){
     if (!angular.isUndefined($scope.qParams.selectedScanner)) {
-      var sc = $scope.qParams.selectedScanner.key;
-      console.debug("getting corresponding study list...");
-      $scope.sLists.studyList = $scope.mrdb.query("test", "studies", {
-                                        startkey: [sc,0,0],
-                                        endkey: [sc,{},{}],
-                                        group: true});
+      CouchDBService.getStudyList($scope.qParams.selectedScanner)
+      .then(function (st_list) {
+          console.info("Got study list from service");
+          $scope.couchdb.studylist = st_list;
+      });
     }
   });
 
-  // Trigger query for seeries list
+  // Trigger query for series list
   $scope.$watch('qParams.selectedStudy', function(){
     if (!angular.isUndefined($scope.qParams.selectedScanner) && !angular.isUndefined($scope.qParams.selectedStudy)) {
-      var sc = $scope.qParams.selectedScanner.key;
-      var st = $scope.qParams.selectedStudy[1];
-      console.debug("getting corresponding series list...");
-      $scope.sLists.seriesList = $scope.mrdb.query("test", "series", {
-                              startkey: [sc,st,0],
-                              endkey: [sc,st,{}],
-                              group: true});
+      CouchDBService.getSeriesList($scope.qParams.selectedScanner,$scope.qParams.selectedStudy)
+      .then(function (se_list) {
+          console.info("Got series list from service");
+          $scope.couchdb.serieslist = se_list;
+      });
     }
   });
 
@@ -78,25 +138,21 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
     if (  !angular.isUndefined($scope.qParams.selectedScanner) &&
           !angular.isUndefined($scope.qParams.selectedStudy) && 
           !angular.isUndefined($scope.qParams.selectedSeries)) {
-      var sc = $scope.qParams.selectedScanner.key;
-      var st = $scope.qParams.selectedStudy[1];
-      var ss = $scope.qParams.selectedSeries[2];
-      console.debug("getting results...");
-      $scope.results.chartdata = $scope.mrdb.list("test", "chart", "TR", {
-                                            startkey: [sc,st,ss,0],
-                                            endkey: [sc,st,ss,{}],
-                                            group: true});
+      CouchDBService.getResults($scope.qParams.selectedScanner,$scope.qParams.selectedStudy, $scope.qParams.selectedSeries)
+      .then(function (r) {
+          console.info("Got results from service");
+          $scope.couchdb.results = r;
+      });
     }
-    console.debug("$scope.results.chartdata in watch: %O", $scope.results.chartdata);
   });
 
-  // Chart initialization stuff
-  $scope.chart = {};
-  $scope.chart.type = "ColumnChart";
-  $scope.chart.displayed = false;
-  $scope.chart.cssStyle = "height:600px; width:100%;";
-  $scope.chart.options = {};
-  $scope.chart.data = $scope.results.chartdata;
+  // // Chart initialization stuff
+  // $scope.chart = {};
+  // $scope.chart.type = "ColumnChart";
+  // $scope.chart.displayed = false;
+  // $scope.chart.cssStyle = "height:600px; width:100%;";
+  // $scope.chart.options = {};
+  // $scope.chart.data = $scope.results.chartdata;
   // $scope.chart.data = { "cols": [
   //                       {id: "col1", label: "Test col 1 - key", type: "string"},
   //                       {id: "col2", label: "Test col 2 - value", type: "number"}
