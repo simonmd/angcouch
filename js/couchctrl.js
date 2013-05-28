@@ -89,20 +89,9 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
 MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService) {
   $scope.couchdb = CouchDBService;
 
-
-
-  // // Define CouchDB server
-  // $scope.server = cornercouch();
-  // // Define CouchDB database to query
-  // $scope.mrdb = $scope.server.getDB('mf_hash');
-
-  // // Initialize stuff
+  // // Initialize query parameters and results
   $scope.qParams = {};
-  // $scope.sLists = {};
-  // $scope.results = {};
-
-  // Get scanner list - the only initial query needed
-  // $scope.sLists.scannerList = $scope.mrdb.query("test", "scanners", { group: true,descending: true });
+  $scope.results = {};
 
   // Get scanner list - the only initial query needed
   CouchDBService.getScannerList()
@@ -133,7 +122,7 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
     }
   });
 
-  // Watch for selected series change, query for final results
+  // Watch for query parameters change, query for final results
   $scope.$watch('qParams.selectedSeries', function(){
     if (  !angular.isUndefined($scope.qParams.selectedScanner) &&
           !angular.isUndefined($scope.qParams.selectedStudy) && 
@@ -146,13 +135,22 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
     }
   });
 
-  // // Chart initialization stuff
-  // $scope.chart = {};
-  // $scope.chart.type = "ColumnChart";
-  // $scope.chart.displayed = false;
-  // $scope.chart.cssStyle = "height:600px; width:100%;";
-  // $scope.chart.options = {};
-  // $scope.chart.data = $scope.results.chartdata;
+  // Chart initialization stuff
+  var chart1 = {};
+      chart1.type = "ColumnChart";
+      chart1.displayed = false;
+      chart1.cssStyle = "height:600px; width:100%;";
+      chart1.data = $scope.couchdb.results;
+      $scope.chart = chart1;
+
+
+  // Trigger chart creation
+  $scope.$watch('couchdb.results', function(){
+    if (!angular.isUndefined($scope.couchdb.results)) {
+      $scope.chart.data = $scope.couchdb.results;
+    }
+  });
+  // End Chart stuff
   // $scope.chart.data = { "cols": [
   //                       {id: "col1", label: "Test col 1 - key", type: "string"},
   //                       {id: "col2", label: "Test col 2 - value", type: "number"}
@@ -162,5 +160,6 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   //                       {c: [ {v: "February"},{v: 13} ]},
   //                       {c: [ {v: "March"}, {v: 24} ]}
   //                     ]};
+
  } 
 );
