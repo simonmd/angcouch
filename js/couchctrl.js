@@ -157,7 +157,7 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
           $scope.couchdb.results = r;
       });
     }
-  });
+  }, true);
 
   // Chart initialization stuff
   var chart1 = {};
