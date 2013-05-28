@@ -52,22 +52,15 @@ angular.module('MRParaMetrix', ['CornerCouch','googlechart.directives']).
       }
     });
 
-    	// // Submit query
-     //  $scope.CouchQuery.result = $scope.mrdb.list("test", "chart", "TR", {
-     //                                              startkey: [CouchQuery.scanner.key,CouchQuery.study[1],0],
-     //                                              endkey: [CouchQuery.scanner.key,CouchQuery.study[1],{}],
-     //                                              group: true,
-     //                                              limit: 10 });
-
-      // // Chart stuff - still not working
-      // var chart1 = {};
-      // chart1.type = "ColumnChart";
-      // chart1.displayed = false;
-      // chart1.cssStyle = "height:600px; width:100%;";
-      // chart1.data = $scope.CouchQuery.result;
-      // chart1.options = {};
-      // $scope.chart = chart1;
-      // // End chart stuff
+      // Chart stuff - still not working
+      var chart1 = {};
+      chart1.type = "ColumnChart";
+      chart1.displayed = false;
+      chart1.cssStyle = "height:600px; width:100%;";
+      chart1.data = $scope.results;
+      chart1.options = {};
+      $scope.chart = chart1;
+      // End chart stuff
   }
 );
 
