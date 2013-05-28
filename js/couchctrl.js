@@ -15,7 +15,7 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
 
     // Get scanner list
     getScannerList: function () {
-      var promise = mrdb.query("test", "scanners", { group: true,descending: true })
+      var promise = mrdb.query("main", "scanners", { group: true,descending: true })
                       .then(function (response) {
                         // console.log(response.data);
                         return response.data;
@@ -28,7 +28,7 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
     getStudyList: function (selectedScanner) {
       var sc = selectedScanner.key;
       console.debug("getStudyList invoked with selectedScanner: %O", sc);
-      var promise = mrdb.query("test", "studies", {
+      var promise = mrdb.query("main", "studies", {
                                         startkey: [sc,0,0],
                                         endkey: [sc,{},{}],
                                         group: true})
@@ -45,7 +45,7 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
       var sc = selectedScanner.key;
       var st = selectedStudy[1];
       console.debug("getSeriesList invoked with selectedScanner: %O and selectedStudy: %O", sc, st);
-      var promise = mrdb.query("test", "series", {
+      var promise = mrdb.query("main", "series", {
                                         startkey: [sc,st,0],
                                         endkey: [sc,st,{}],
                                         group: true})
@@ -63,7 +63,7 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
       var st = selectedStudy[1];
       var se = selectedSeries[2];
       console.debug("getResults invoked with selectedScanner: %O, selectedStudy: %O and selectedSeries %O", sc, st, se);
-      var promise = mrdb.list("test", "chart", "TR", {
+      var promise = mrdb.list("parameters", "chart", "TR", {
                                             startkey: [sc,st,se,0],
                                             endkey: [sc,st,se,{}],
                                             group: true})
