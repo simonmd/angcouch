@@ -147,7 +147,7 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   });
 
   // Watch for query parameters change, query for final results
-  $scope.$watch('qParams.selectedSeries', function(){
+  $scope.$watch('qParams', function(){
     if (  !angular.isUndefined($scope.qParams.selectedScanner) &&
           !angular.isUndefined($scope.qParams.selectedStudy) && 
           !angular.isUndefined($scope.qParams.selectedSeries)) {
