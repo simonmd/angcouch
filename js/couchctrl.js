@@ -109,7 +109,7 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
 
   // Initialize query parameters and results
   $scope.qParams = {};
-  $scope.results = {};
+  $scope.couchdb.results = {};
 
   // Initialize a parameter to query
   $scope.qParams.selectedParameter = "TR";
@@ -152,33 +152,45 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
 
   // Watch for query parameters change, query for final results
   $scope.$watch('qParams', function(){
+    if (isQueryComplete()) {
+
+      var sel_param = "TR";
+      CouchDBService.getResults($scope.qParams.selectedScanner,$scope.qParams.selectedStudy, $scope.qParams.selectedSeries, sel_param)
+      .then(function (r) {
+          console.info("Got results from service");
+          $scope.couchdb.results[sel_param] = r;
+      });
+
+    }
+  }, true);
+
+
+  function isQueryComplete() {
     if (  !angular.isUndefined($scope.qParams.selectedScanner) &&
           !angular.isUndefined($scope.qParams.selectedStudy) &&
           !angular.isUndefined($scope.qParams.selectedSeries) && 
           !angular.isUndefined($scope.qParams.selectedParameter)) {
-      CouchDBService.getResults($scope.qParams.selectedScanner,$scope.qParams.selectedStudy, $scope.qParams.selectedSeries, $scope.qParams.selectedParameter)
-      .then(function (r) {
-          console.info("Got results from service");
-          $scope.couchdb.results = r;
-      });
+      console.info("Query parameters are complete");
+      return true;
     }
-  }, true);
+    else {
+      return false;
+    }
+  };
 
   // Chart initialization stuff
   var chart1 = {};
       chart1.type = "ColumnChart";
       chart1.displayed = false;
       chart1.cssStyle = "height:600px; width:100%;";
-      chart1.data = $scope.couchdb.results;
       $scope.chart = chart1;
-
 
   // Trigger chart creation
   $scope.$watch('couchdb.results', function(){
     if (!angular.isUndefined($scope.couchdb.results)) {
-      $scope.chart.data = $scope.couchdb.results;
+      $scope.chart.data = $scope.couchdb.results.TR;
     }
-  });
+  }, true);
 
  } 
 );
