@@ -107,9 +107,10 @@ MRParaMetrix.factory('CouchDBService', function (cornercouch) {
 MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService) {
   $scope.couchdb = CouchDBService;
 
-  // Initialize query parameters and results
+  // Initialize query parameters, results and charts models
   $scope.qParams = {};
   $scope.couchdb.results = {};
+  $scope.charts = {};
 
   // Initialize a parameter to query
   // $scope.qParams.selectedParameter = "TR";
@@ -176,16 +177,23 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   };
 
   // Chart initialization stuff
-  var chart1 = {};
-      chart1.type = "ColumnChart";
-      chart1.displayed = false;
-      chart1.cssStyle = "height:600px; width:100%;";
-      $scope.chart = chart1;
+  // var chart1 = {};
+  //     chart1.type = "ColumnChart";
+  //     chart1.displayed = false;
+  //     chart1.cssStyle = "height:600px; width:100%;";
+  //     $scope.charts.TR = chart1;
 
   // Trigger chart creation
   $scope.$watch('couchdb.results', function(){
     if (!angular.isUndefined($scope.couchdb.results)) {
-      $scope.chart.data = $scope.couchdb.results.NEX;
+      angular.forEach($scope.couchdb.parameterlist, function(sel_param){
+        $scope.charts[sel_param] = {};
+        $scope.charts[sel_param].type = "ColumnChart";
+        $scope.charts[sel_param].options = { title: sel_param};
+        $scope.charts[sel_param].displayed = false;
+        $scope.charts[sel_param].cssStyle = "height:600px; width:100%;";
+        $scope.charts[sel_param].data = $scope.couchdb.results[sel_param];
+      });
     }
   }, true);
 
