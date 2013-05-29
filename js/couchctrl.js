@@ -191,7 +191,7 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
         $scope.charts[sel_param].type = "ColumnChart";
         $scope.charts[sel_param].options = { title: sel_param};
         $scope.charts[sel_param].displayed = false;
-        $scope.charts[sel_param].cssStyle = "height:600px; width:100%;";
+        $scope.charts[sel_param].cssStyle = "height:100%; width:100%;";
         $scope.charts[sel_param].data = $scope.couchdb.results[sel_param];
       });
     }
