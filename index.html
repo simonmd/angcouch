@@ -68,11 +68,13 @@
           </div><!--/row-->
 
           <!-- Main chart script-->
-          <div class="row-fluid ">
-            <div class="span4" ng-repeat="parameter in couchdb.parameterlist">
-              <div google-chart chart="charts[parameter]" style="{{charts[parameter].cssStyle}}"/></div>
-            </div>
-          </div>
+          <ul class="thumbnails">
+            <li class="span4" ng-repeat="parameter in couchdb.parameterlist">
+              <div class="thumbnail">
+                <div google-chart chart="charts[parameter]" style="{{charts[parameter].cssStyle}}"/></div>
+              </div>
+            </li>
+          </ul>
 
         </div><!--/span-->
       </div><!--/row-->
