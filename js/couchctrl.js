@@ -153,17 +153,15 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   // Watch for query parameters change, query for final results
   $scope.$watch('qParams', function(){
     if (isQueryComplete()) {
-
-      var sel_param = "TR";
-      CouchDBService.getResults($scope.qParams.selectedScanner,$scope.qParams.selectedStudy, $scope.qParams.selectedSeries, sel_param)
-      .then(function (r) {
-          console.info("Got results from service");
-          $scope.couchdb.results[sel_param] = r;
+      angular.forEach($scope.couchdb.parameterlist, function(sel_param){
+        CouchDBService.getResults($scope.qParams.selectedScanner,$scope.qParams.selectedStudy, $scope.qParams.selectedSeries, sel_param)
+        .then(function (r) {
+            console.info("Got results from service");
+            $scope.couchdb.results[sel_param] = r;
+        });
       });
-
     }
   }, true);
-
 
   function isQueryComplete() {
     if (  !angular.isUndefined($scope.qParams.selectedScanner) &&
