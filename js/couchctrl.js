@@ -112,7 +112,7 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   $scope.couchdb.results = {};
 
   // Initialize a parameter to query
-  $scope.qParams.selectedParameter = "TR";
+  // $scope.qParams.selectedParameter = "TR";
 
   // Get available parameter list  - based on the CouchDB views
   CouchDBService.getParameterList()
@@ -166,8 +166,7 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   function isQueryComplete() {
     if (  !angular.isUndefined($scope.qParams.selectedScanner) &&
           !angular.isUndefined($scope.qParams.selectedStudy) &&
-          !angular.isUndefined($scope.qParams.selectedSeries) && 
-          !angular.isUndefined($scope.qParams.selectedParameter)) {
+          !angular.isUndefined($scope.qParams.selectedSeries)) {
       console.info("Query parameters are complete");
       return true;
     }
@@ -186,7 +185,7 @@ MRParaMetrix.controller('MainCtrl', function($scope, cornercouch, CouchDBService
   // Trigger chart creation
   $scope.$watch('couchdb.results', function(){
     if (!angular.isUndefined($scope.couchdb.results)) {
-      $scope.chart.data = $scope.couchdb.results.TR;
+      $scope.chart.data = $scope.couchdb.results.NEX;
     }
   }, true);
 
